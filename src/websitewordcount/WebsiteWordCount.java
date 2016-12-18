@@ -6,6 +6,7 @@
 package websitewordcount;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -84,6 +85,18 @@ public class WebsiteWordCount {
         //Add the panel to the frame
         frame.add(topBar, BorderLayout.NORTH);
         
+        //Create a panel to hold the table and buttons
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        //Create a panel to hold the buttons
+        JPanel mainPanelButtonPanel = new JPanel(new FlowLayout());
+        //Create a search button
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener((ActionEvent e) -> {
+            String searchTerm = JOptionPane.showInputDialog(frame, "Word to search for", "Search", JOptionPane.QUESTION_MESSAGE);
+            searchTable(searchTerm);
+        });
+        mainPanelButtonPanel.add(searchButton);
+        mainPanel.add(mainPanelButtonPanel, BorderLayout.NORTH);
         //Create the table and add it to the frame
         table = new JTable();
         
@@ -94,8 +107,8 @@ public class WebsiteWordCount {
         //Create a scrollable pane for the table
         JScrollPane pane = new JScrollPane(table);
         pane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        frame.add(pane, BorderLayout.CENTER);
-        
+        mainPanel.add(pane, BorderLayout.CENTER);
+        frame.add(mainPanel, BorderLayout.CENTER);
         //Set the frame's size and show it
         frame.setSize(500,600);
         frame.setVisible(true);
@@ -258,5 +271,14 @@ public class WebsiteWordCount {
         quickSort(counts, uniqueWords, 0, uniqueWordCount+1);
         //Fill the table with our wordlist and counts
         fillTable(uniqueWords, counts);
+    }
+
+    private void searchTable(String searchTerm) {
+        DefaultTableModel tm = (DefaultTableModel)table.getModel();
+        for(int i = 0;i<table.getRowCount();i++) {
+            if(table.getValueAt(i, 0).toString().equalsIgnoreCase(searchTerm)) {
+                table.changeSelection(i, 0, false, false);
+            }
+        }
     }
 }
