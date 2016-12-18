@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,6 +41,7 @@ public class WebsiteWordCount {
         BorderLayout frameLayout = new BorderLayout();
         frameLayout.setHgap(10);
         frameLayout.setVgap(10);
+        
         frame.setLayout(frameLayout);
         
         //Create a panel to hold the urlfield and button
@@ -89,10 +93,11 @@ public class WebsiteWordCount {
         
         //Create a scrollable pane for the table
         JScrollPane pane = new JScrollPane(table);
+        pane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         frame.add(pane, BorderLayout.CENTER);
         
         //Set the frame's size and show it
-        frame.setSize(400,400);
+        frame.setSize(500,600);
         frame.setVisible(true);
     }
     
