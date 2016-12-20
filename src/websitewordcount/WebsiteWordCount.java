@@ -214,9 +214,11 @@ public class WebsiteWordCount {
     }
     
     private void loadCommonWordList() {
+        File f = new File("commonWordsList.dat");
+        BufferedReader in = null;
         try {
-            File f = new File("commonWordsList.dat");
-            BufferedReader in = new BufferedReader(new FileReader(f));
+            f = new File("commonWordsList.dat");
+            in = new BufferedReader(new FileReader(f));
             String s;
             while((s = in.readLine()) != null) {
                 commonWordList.add(s);
@@ -225,6 +227,12 @@ public class WebsiteWordCount {
             JOptionPane.showMessageDialog(frame, "Could not load common word list[commonWordsList.dat]", "File not found", JOptionPane.ERROR_MESSAGE);
         } catch(Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(in != null) {
+                    in.close();
+                }
+            } catch(Exception e) { }
         }
     }
 }

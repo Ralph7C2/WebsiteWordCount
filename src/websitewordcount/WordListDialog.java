@@ -5,6 +5,12 @@
  */
 package websitewordcount;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+
 /**
  *
  * @author 110100100
@@ -19,9 +25,7 @@ public class WordListDialog extends javax.swing.JDialog {
         super(parent, true);
         this.parent = parent;
         initComponents();
-        String[] words = new String[parent.parent.commonWordList.size()];
-        parent.parent.commonWordList.toArray(words);
-        wordList.setListData(words);
+        updateList();
     }
 
     /**
@@ -39,6 +43,7 @@ public class WordListDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         addWordField = new javax.swing.JTextField();
         addButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Edit Word List");
@@ -54,6 +59,12 @@ public class WordListDialog extends javax.swing.JDialog {
         jScrollPane1.setViewportView(wordList);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Add"));
+
+        addWordField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addWordFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -79,6 +90,13 @@ public class WordListDialog extends javax.swing.JDialog {
             }
         });
 
+        removeButton.setText("Remove");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,7 +109,8 @@ public class WordListDialog extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(closeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -99,32 +118,59 @@ public class WordListDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(removeButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
                     .addComponent(addButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        File f = new File("commonWordsList.dat");
+        PrintWriter out = null;
+        try {
+            f = new File("commonWordsList.dat");
+            out = new PrintWriter(new FileWriter(f));
+            for(String word : parent.parent.commonWordList) {
+                out.println(word);
+            }
+            out.flush();
+            out.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(out != null) {
+                    out.close();
+                }
+            } catch(Exception e) { }
+        }
         dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        if(addWordField.getText() != null && addWordField.getText().length()>0) {
-            if(!parent.parent.commonWordList.contains(addWordField.getText())) {
-                parent.parent.commonWordList.add(addWordField.getText());
-                String[] words = new String[parent.parent.commonWordList.size()];
-                parent.parent.commonWordList.toArray(words);
-                wordList.setListData(words);
-            }
-        }
+        addWord(addWordField.getText());
+        addWordField.setText("");
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void addWordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addWordFieldActionPerformed
+        addWord(addWordField.getText());
+        addWordField.setText("");
+    }//GEN-LAST:event_addWordFieldActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        for(int i : wordList.getSelectedIndices()) {
+            parent.parent.commonWordList.remove(wordList.getSelectedValue());
+            updateList();
+        }
+    }//GEN-LAST:event_removeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
@@ -132,6 +178,22 @@ public class WordListDialog extends javax.swing.JDialog {
     private javax.swing.JButton closeButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton removeButton;
     private javax.swing.JList<String> wordList;
     // End of variables declaration//GEN-END:variables
+
+    private void addWord(String word) {
+        if(word != null && word.length()>0) {
+            if(!parent.parent.commonWordList.contains(word)) {
+                parent.parent.commonWordList.add(word);
+                updateList();
+            }
+        }
+    }
+    
+    private void updateList() {
+        String[] words = new String[parent.parent.commonWordList.size()];
+                parent.parent.commonWordList.toArray(words);
+                wordList.setListData(words);
+    }
 }
