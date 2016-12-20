@@ -39,7 +39,9 @@ public class WebWordCountFrame extends javax.swing.JFrame {
             if (words[i] == null) {
                 continue;
             }
-            tm.addRow(new Object[]{words[i], counts[i]});
+            if(!parent.commonWordList.contains(words[i])) {
+                tm.addRow(new Object[]{words[i], counts[i]});
+            }
         }
 
     }

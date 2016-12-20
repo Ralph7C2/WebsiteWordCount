@@ -5,7 +5,14 @@
  */
 package websitewordcount;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,12 +24,24 @@ import org.jsoup.nodes.Document;
 public class WebsiteWordCount {
 
     WebWordCountFrame frame;
+    ArrayList<String> commonWordList;
     
+    /**
+     * Constructor
+     */
     public WebsiteWordCount() {
+        commonWordList = new ArrayList<>();
+        loadCommonWordList();
+        
+        //Initialize and show the frame
         frame = new WebWordCountFrame(this);
         frame.setVisible(true);
     }
     
+    /**
+     *  Entry point
+     * @param args command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -194,4 +213,18 @@ public class WebsiteWordCount {
         frame.fillTable(uniqueWords, counts);
     }
     
+    private void loadCommonWordList() {
+        try {
+            File f = new File("commonWordsList.dat");
+            BufferedReader in = new BufferedReader(new FileReader(f));
+            String s;
+            while((s = in.readLine()) != null) {
+                commonWordList.add(s);
+            }
+        } catch(FileNotFoundException e) {
+            JOptionPane.showMessageDialog(frame, "Could not load common word list[commonWordsList.dat]", "File not found", JOptionPane.ERROR_MESSAGE);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
