@@ -11,25 +11,27 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author 110100100
+ * @author Ralph Landon
  */
 public class WebWordCountFrame extends javax.swing.JFrame {
+
     boolean excludeCommonWords;
     boolean useMin;
     boolean useMax;
     int minWordLength;
     int maxWordLength;
-    
+
     WebsiteWordCount parent;
 
     /**
      * Creates new form WebWordCountFrame
+     *
      * @param parent The main program
      */
     public WebWordCountFrame(WebsiteWordCount parent) {
         this.parent = parent;
         initComponents();
-        
+
         excludeCommonWords = false;
         useMin = false;
         useMax = false;
@@ -50,7 +52,7 @@ public class WebWordCountFrame extends javax.swing.JFrame {
             if (words[i] == null) {
                 continue;
             }
-            if(!parent.commonWordList.contains(words[i])) {
+            if (!parent.commonWordList.contains(words[i])) {
                 tm.addRow(new Object[]{words[i], counts[i]});
             }
         }
@@ -271,19 +273,19 @@ public class WebWordCountFrame extends javax.swing.JFrame {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         String searchWord = JOptionPane.showInputDialog(this, "Enter word to search", "Search", JOptionPane.QUESTION_MESSAGE);
-        DefaultTableModel tm = (DefaultTableModel)wordCountTable.getModel();
+        DefaultTableModel tm = (DefaultTableModel) wordCountTable.getModel();
         boolean found = false;
-        for(int i = 0;i<tm.getRowCount();i++) {
-            if(searchWord.equalsIgnoreCase((String)tm.getValueAt(i,0))) {
-                wordCountTable.removeRowSelectionInterval(0, tm.getRowCount()-1);
+        for (int i = 0; i < tm.getRowCount(); i++) {
+            if (searchWord.equalsIgnoreCase((String) tm.getValueAt(i, 0))) {
+                wordCountTable.removeRowSelectionInterval(0, tm.getRowCount() - 1);
                 wordCountTable.addRowSelectionInterval(i, i);
                 wordCountTable.scrollRectToVisible(new Rectangle(wordCountTable.getCellRect(i, 0, true)));
                 found = true;
                 break;
             }
         }
-        if(!found) {
-            JOptionPane.showMessageDialog(this, "The word \""+searchWord + "\" was not found", "Word not found", JOptionPane.INFORMATION_MESSAGE);
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "The word \"" + searchWord + "\" was not found", "Word not found", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -315,27 +317,48 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     void setFilter(String filter, boolean bool, int num) {
-        switch(filter) {
-            case "excludeCommon": excludeCommonWords = bool; break;
-            case "useMin": useMin = bool; minWordLength = (num==-1?minWordLength:num); break;
-            case "useMax": useMax = bool; maxWordLength = (num==-1?maxWordLength:num); break;
+        switch (filter) {
+            case "excludeCommon":
+                excludeCommonWords = bool;
+                break;
+            case "useMin":
+                useMin = bool;
+                minWordLength = (num == -1 ? minWordLength : num);
+                break;
+            case "useMax":
+                useMax = bool;
+                maxWordLength = (num == -1 ? maxWordLength : num);
+                break;
         }
     }
 
     boolean getFilter(String filter) {
-        switch(filter) {
-            case "excludeCommon": return excludeCommonWords;
-            case "useMin": return useMin;
-            case "useMax": return useMax;
-            default: return false;
+        switch (filter) {
+            case "excludeCommon":
+                return excludeCommonWords;
+            case "useMin":
+                return useMin;
+            case "useMax":
+                return useMax;
+            default:
+                return false;
         }
     }
 
     String getFilterValue(String filter) {
-        switch(filter) {
-            case "min": return ""+minWordLength;
-            case "max": return ""+maxWordLength;
-            default: return "";
+        switch (filter) {
+            case "min":
+                return "" + minWordLength;
+            case "max":
+                return "" + maxWordLength;
+            default:
+                return "";
         }
+    }
+
+    void fillLinksTable() {
+        String[] words = new String[parent.links.size()];
+        parent.links.toArray(words);
+        HyperlinkList.setListData(words);
     }
 }

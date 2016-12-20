@@ -10,43 +10,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
- * @author 110100100
+ * @author Ralph Landon
  */
 public class WebsiteWordCount {
 
-    WebWordCountFrame frame;
-    ArrayList<String> commonWordList;
-    
     /**
-     * Constructor
-     */
-    public WebsiteWordCount() {
-        commonWordList = new ArrayList<>();
-        loadCommonWordList();
-        
-        //Initialize and show the frame
-        frame = new WebWordCountFrame(this);
-        frame.setVisible(true);
-    }
-    
-    /**
-     *  Entry point
+     * Entry point
+     *
      * @param args command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -66,10 +52,10 @@ public class WebsiteWordCount {
 
     /**
      *
-     * @param arr   The integer array to sort
-     * @param w     The String array(gets sorted with the integer array)
-     * @param low   The low end of this run
-     * @param high  The high end of this run
+     * @param arr The integer array to sort
+     * @param w The String array(gets sorted with the integer array)
+     * @param low The low end of this run
+     * @param high The high end of this run
      */
     public static void quickSort(int[] arr, String[] w, int low, int high) {
         //Check to see if we are done
@@ -111,7 +97,23 @@ public class WebsiteWordCount {
             quickSort(arr, w, i, high);
         }
     }
- 
+
+    WebWordCountFrame frame;
+    ArrayList<String> commonWordList;
+    ArrayList<String> links;
+
+    /**
+     * Constructor
+     */
+    public WebsiteWordCount() {
+        commonWordList = new ArrayList<>();
+        loadCommonWordList();
+
+        //Initialize and show the frame
+        frame = new WebWordCountFrame(this);
+        frame.setVisible(true);
+    }
+
     private String getValidatedUrl(String url) {
         if (url.length() == 0) {
             return null;
@@ -129,7 +131,7 @@ public class WebsiteWordCount {
 
     /**
      *
-     * @param url   The URL from which to gather the word count
+     * @param url The URL from which to gather the word count
      */
     protected void getWordCountFromUrl(String url) {
         frame.clearTable();
@@ -151,6 +153,12 @@ public class WebsiteWordCount {
         if (doc == null) {
             return;
         }
+        Elements ahref = doc.getElementsByTag("a");
+        for(Element e : ahref) {
+            links.add(e.attr("href"));
+        }
+        frame.fillLinksTable();
+        
         //Split the words using regex so that we don't grab numbers and commas and the like
         String[] words = doc.text().split("[^A-Za-z]");
         //Splitting in this way does give us some empty elements, so lets move those to the end
@@ -212,7 +220,7 @@ public class WebsiteWordCount {
         //Fill the table with our wordlist and counts
         frame.fillTable(uniqueWords, counts);
     }
-    
+
     private void loadCommonWordList() {
         File f = new File("commonWordsList.dat");
         BufferedReader in = null;
@@ -220,19 +228,20 @@ public class WebsiteWordCount {
             f = new File("commonWordsList.dat");
             in = new BufferedReader(new FileReader(f));
             String s;
-            while((s = in.readLine()) != null) {
+            while ((s = in.readLine()) != null) {
                 commonWordList.add(s);
             }
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(frame, "Could not load common word list[commonWordsList.dat]", "File not found", JOptionPane.ERROR_MESSAGE);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if(in != null) {
+                if (in != null) {
                     in.close();
                 }
-            } catch(Exception e) { }
+            } catch (Exception e) {
+            }
         }
     }
 }
