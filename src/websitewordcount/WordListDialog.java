@@ -5,8 +5,6 @@
  */
 package websitewordcount;
 
-import java.awt.Color;
-
 /**
  *
  * @author 110100100
@@ -15,8 +13,7 @@ public class WordListDialog extends javax.swing.JDialog {
     public WebWordCountFrame parent;
     /**
      * Creates new form WordListDialog
-     * @param parent The parent frame
-     * @param modal 
+     * @param parent The parent frame 
      */
     public WordListDialog(WebWordCountFrame parent) {
         super(parent, true);
@@ -125,15 +122,6 @@ public class WordListDialog extends javax.swing.JDialog {
                 String[] words = new String[parent.parent.commonWordList.size()];
                 parent.parent.commonWordList.toArray(words);
                 wordList.setListData(words);
-            } else {
-                Color prior = wordList.getBackground();
-                wordList.setBackground(Color.red);
-                try {
-                    Thread.sleep(1000);
-                } catch(InterruptedException e) {
-                    
-                }
-                wordList.setBackground(prior);
             }
         }
     }//GEN-LAST:event_addButtonActionPerformed

@@ -21,6 +21,11 @@ public class FilterDialog extends JDialog {
         super(parent, true);
         this.parent = parent;
         initComponents();
+        excludeCommonWordsCheckbox.setSelected(parent.getFilter("excludeCommon"));
+        minLengthCheckbox.setSelected(parent.getFilter("useMin"));
+        maxLengthCheckbox.setSelected(parent.getFilter("useMax"));
+        minLengthField.setText(parent.getFilterValue("min"));
+        maxLengthField.setText(parent.getFilterValue("max"));
     }
 
     /**
@@ -89,6 +94,11 @@ public class FilterDialog extends JDialog {
         );
 
         okayButton.setText("Okay");
+        okayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okayButtonActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -144,6 +154,21 @@ public class FilterDialog extends JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void okayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okayButtonActionPerformed
+        parent.setFilter("excludeCommon", excludeCommonWordsCheckbox.isSelected(), -1);
+        try {
+            parent.setFilter("useMin", minLengthCheckbox.isSelected(), Integer.parseInt(minLengthField.getText()));
+        } catch(NumberFormatException e) {
+            parent.setFilter("useMin", minLengthCheckbox.isSelected(), -1);
+        }
+        try {
+            parent.setFilter("useMax", maxLengthCheckbox.isSelected(), Integer.parseInt(maxLengthField.getText()));
+        } catch(NumberFormatException e) {
+            parent.setFilter("useMax", maxLengthCheckbox.isSelected(), -1);
+        }
+        dispose();
+    }//GEN-LAST:event_okayButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

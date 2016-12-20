@@ -14,7 +14,12 @@ import javax.swing.table.DefaultTableModel;
  * @author 110100100
  */
 public class WebWordCountFrame extends javax.swing.JFrame {
-
+    boolean excludeCommonWords;
+    boolean useMin;
+    boolean useMax;
+    int minWordLength;
+    int maxWordLength;
+    
     WebsiteWordCount parent;
 
     /**
@@ -24,6 +29,12 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     public WebWordCountFrame(WebsiteWordCount parent) {
         this.parent = parent;
         initComponents();
+        
+        excludeCommonWords = false;
+        useMin = false;
+        useMax = false;
+        minWordLength = 0;
+        maxWordLength = 0;
     }
 
     protected void clearTable() {
@@ -302,4 +313,29 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     private javax.swing.JTextField urlTextField;
     private javax.swing.JTable wordCountTable;
     // End of variables declaration//GEN-END:variables
+
+    void setFilter(String filter, boolean bool, int num) {
+        switch(filter) {
+            case "excludeCommon": excludeCommonWords = bool; break;
+            case "useMin": useMin = bool; minWordLength = (num==-1?minWordLength:num); break;
+            case "useMax": useMax = bool; maxWordLength = (num==-1?maxWordLength:num); break;
+        }
+    }
+
+    boolean getFilter(String filter) {
+        switch(filter) {
+            case "excludeCommon": return excludeCommonWords;
+            case "useMin": return useMin;
+            case "useMax": return useMax;
+            default: return false;
+        }
+    }
+
+    String getFilterValue(String filter) {
+        switch(filter) {
+            case "min": return ""+minWordLength;
+            case "max": return ""+maxWordLength;
+            default: return "";
+        }
+    }
 }
