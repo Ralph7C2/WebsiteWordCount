@@ -5,6 +5,16 @@
  */
 package websitewordcount;
 
+<<<<<<< HEAD
+=======
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+>>>>>>> refs/remotes/origin/master
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import org.jsoup.Jsoup;
@@ -16,6 +26,7 @@ import org.jsoup.nodes.Document;
  */
 public class WebsiteWordCount {
 
+<<<<<<< HEAD
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -28,6 +39,60 @@ public class WebsiteWordCount {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
+=======
+            @Override
+            public void focusLost(FocusEvent e) {
+                
+            }
+            
+        });
+        topBar.add(urlField, gbc);
+        //Create the go button and add it to the panel
+        JButton goButton = new JButton("Get Words");
+        gbc.gridx = 1;
+        gbc.weightx = .1;
+        goButton.addActionListener((ActionEvent e) -> {
+            getWordCountFromUrl();
+        });
+        topBar.add(goButton, gbc);
+        //Add the panel to the frame
+        frame.add(topBar, BorderLayout.NORTH);
+        
+        //Create a panel to hold the table and buttons
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        //Create a panel to hold the buttons
+        JPanel mainPanelButtonPanel = new JPanel(new FlowLayout());
+        //Create a search button
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener((ActionEvent e) -> {
+            String searchTerm = JOptionPane.showInputDialog(frame, "Word to search for", "Search", JOptionPane.QUESTION_MESSAGE);
+            searchTable(searchTerm);
+        });
+        mainPanelButtonPanel.add(searchButton);
+        mainPanel.add(mainPanelButtonPanel, BorderLayout.NORTH);
+        //Create the table and add it to the frame
+        table = new JTable();
+        
+        //Get the table model to set the column labels
+        DefaultTableModel tm = (DefaultTableModel)table.getModel();
+        tm.setColumnIdentifiers(new Object[] {"Word", "Count"});
+        
+        //Create a scrollable pane for the table
+        JScrollPane pane = new JScrollPane(table);
+        pane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        mainPanel.add(pane, BorderLayout.CENTER);
+        frame.add(mainPanel, BorderLayout.CENTER);
+        //Set the frame's size and show it
+        frame.setSize(500,600);
+        frame.setVisible(true);
+    }
+    
+    public void fillTable(String[] words, int[] counts) {
+        DefaultTableModel tm = (DefaultTableModel)table.getModel();
+        for(int i = words.length-1;i>=0;i--) {
+            if(words[i]==null) {
+                continue;
+>>>>>>> refs/remotes/origin/master
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(WebWordCountFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -203,4 +268,17 @@ public class WebsiteWordCount {
         //Fill the table with our wordlist and counts
         frame.fillTable(uniqueWords, counts);
     }
+<<<<<<< HEAD
 }
+=======
+
+    private void searchTable(String searchTerm) {
+        DefaultTableModel tm = (DefaultTableModel)table.getModel();
+        for(int i = 0;i<table.getRowCount();i++) {
+            if(table.getValueAt(i, 0).toString().equalsIgnoreCase(searchTerm)) {
+                table.changeSelection(i, 0, false, false);
+            }
+        }
+    }
+}
+>>>>>>> refs/remotes/origin/master
