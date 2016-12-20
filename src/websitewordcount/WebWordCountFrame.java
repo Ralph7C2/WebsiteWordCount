@@ -205,13 +205,6 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         parent.getWordCountFromUrl(urlTextField.getText());
     }//GEN-LAST:event_getWordsButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> HyperlinkList;
     private javax.swing.JButton getWordsButton;
