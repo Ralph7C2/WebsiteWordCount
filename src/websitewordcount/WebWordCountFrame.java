@@ -82,6 +82,11 @@ public class WebWordCountFrame extends javax.swing.JFrame {
                 urlTextFieldFocusGained(evt);
             }
         });
+        urlTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                urlTextFieldActionPerformed(evt);
+            }
+        });
 
         getWordsButton.setText("Get Words");
         getWordsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -141,6 +146,11 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         filterButton.setFocusable(false);
         filterButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         filterButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        filterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterButtonActionPerformed(evt);
+            }
+        });
         jToolBar1.add(filterButton);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -263,6 +273,15 @@ public class WebWordCountFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "The word \""+searchWord + "\" was not found", "Word not found", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void urlTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_urlTextFieldActionPerformed
+        parent.getWordCountFromUrl(urlTextField.getText());
+    }//GEN-LAST:event_urlTextFieldActionPerformed
+
+    private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterButtonActionPerformed
+        FilterDialog fd = new FilterDialog(this);
+        fd.setVisible(true);
+    }//GEN-LAST:event_filterButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> HyperlinkList;
