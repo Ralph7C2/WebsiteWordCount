@@ -9,17 +9,19 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 /**
  *
- * @author 110100100
+ * @author Ralph Landon
  */
 public class WordListDialog extends javax.swing.JDialog {
+
     public WebWordCountFrame parent;
+
     /**
      * Creates new form WordListDialog
-     * @param parent The parent frame 
+     *
+     * @param parent The parent frame
      */
     public WordListDialog(WebWordCountFrame parent) {
         super(parent, true);
@@ -138,19 +140,20 @@ public class WordListDialog extends javax.swing.JDialog {
         try {
             f = new File("commonWordsList.dat");
             out = new PrintWriter(new FileWriter(f));
-            for(String word : parent.parent.commonWordList) {
+            for (String word : parent.parent.commonWordList) {
                 out.println(word);
             }
             out.flush();
             out.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if(out != null) {
+                if (out != null) {
                     out.close();
                 }
-            } catch(Exception e) { }
+            } catch (Exception e) {
+            }
         }
         dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
@@ -166,7 +169,7 @@ public class WordListDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_addWordFieldActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        for(int i : wordList.getSelectedIndices()) {
+        for (int i : wordList.getSelectedIndices()) {
             parent.parent.commonWordList.remove(wordList.getSelectedValue());
             updateList();
         }
@@ -183,17 +186,17 @@ public class WordListDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void addWord(String word) {
-        if(word != null && word.length()>0) {
-            if(!parent.parent.commonWordList.contains(word)) {
+        if (word != null && word.length() > 0) {
+            if (!parent.parent.commonWordList.contains(word)) {
                 parent.parent.commonWordList.add(word);
                 updateList();
             }
         }
     }
-    
+
     private void updateList() {
         String[] words = new String[parent.parent.commonWordList.size()];
-                parent.parent.commonWordList.toArray(words);
-                wordList.setListData(words);
+        parent.parent.commonWordList.toArray(words);
+        wordList.setListData(words);
     }
 }

@@ -9,7 +9,7 @@ import javax.swing.JDialog;
 
 /**
  *
- * @author 110100100
+ * @author Ralph Landon
  */
 public class FilterDialog extends JDialog {
     public WebWordCountFrame parent;
