@@ -191,6 +191,11 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.lightGray, null, null));
 
         replaceListButton.setText("Replace List");
+        replaceListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                replaceListButtonActionPerformed(evt);
+            }
+        });
 
         addToListButton.setText("Add to List");
 
@@ -298,6 +303,13 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         fd.setVisible(true);
     }//GEN-LAST:event_filterButtonActionPerformed
 
+    private void replaceListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replaceListButtonActionPerformed
+        clearTable();
+        parent.links.clear();
+        clearLinkList();
+        parent.getWordCountFromUrl(HyperlinkList.get);
+    }//GEN-LAST:event_replaceListButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> HyperlinkList;
     private javax.swing.JButton addToListButton;
@@ -356,9 +368,13 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         }
     }
 
-    void fillLinksTable() {
+    void fillLinkList() {
         String[] words = new String[parent.links.size()];
         parent.links.toArray(words);
         HyperlinkList.setListData(words);
+    }
+    
+    void clearLinkList() {
+        HyperlinkList.setListData(new String[] {});
     }
 }

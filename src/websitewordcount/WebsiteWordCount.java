@@ -157,7 +157,7 @@ public class WebsiteWordCount {
         for(Element e : ahref) {
             links.add(e.attr("href"));
         }
-        frame.fillLinksTable();
+        frame.fillLinkList();
         
         //Split the words using regex so that we don't grab numbers and commas and the like
         String[] words = doc.text().split("[^A-Za-z]");
