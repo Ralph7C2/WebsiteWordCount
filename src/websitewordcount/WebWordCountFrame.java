@@ -22,6 +22,9 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     int maxWordLength;
 
     WebsiteWordCount parent;
+    String[] words;
+    int[] counts;
+    
 
     /**
      * Creates new form WebWordCountFrame
@@ -47,16 +50,29 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     }
 
     protected void fillTable(String[] words, int[] counts) {
+        this.words = words;
+        this.counts = counts;
         DefaultTableModel tm = (DefaultTableModel) wordCountTable.getModel();
         for (int i = words.length - 1; i >= 0; i--) {
             if (words[i] == null) {
                 continue;
             }
-            if (!parent.commonWordList.contains(words[i])) {
+            if ((!excludeCommonWords || !parent.commonWordList.contains(words[i]))&&(!useMin || words[i].length()>=minWordLength)&&(!useMax || words[i].length()<=maxWordLength)) {
                 tm.addRow(new Object[]{words[i], counts[i]});
             }
         }
-
+    }
+    
+    private void updateTable() {
+        DefaultTableModel tm = (DefaultTableModel) wordCountTable.getModel();
+        for (int i = words.length - 1; i >= 0; i--) {
+            if (words[i] == null) {
+                continue;
+            }
+            if ((!excludeCommonWords || !parent.commonWordList.contains(words[i]))&&(!useMin || words[i].length()>=minWordLength)&&(!useMax || words[i].length()<=maxWordLength)) {
+                tm.addRow(new Object[]{words[i], counts[i]});
+            }
+        }
     }
 
     protected void setUrlText(String url) {
@@ -329,18 +345,32 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     void setFilter(String filter, boolean bool, int num) {
+        boolean filterChanged = false;
         switch (filter) {
             case "excludeCommon":
+                if(excludeCommonWords != bool) {
+                    filterChanged = true;
+                }
                 excludeCommonWords = bool;
                 break;
             case "useMin":
+                if(useMin != bool || minWordLength!=num) {
+                    filterChanged = true;
+                }
                 useMin = bool;
                 minWordLength = (num == -1 ? minWordLength : num);
                 break;
             case "useMax":
+                if(useMax != bool || maxWordLength!=num) {
+                    filterChanged = true;
+                }
                 useMax = bool;
                 maxWordLength = (num == -1 ? maxWordLength : num);
                 break;
+        }
+        if(filterChanged) {
+            clearTable();
+            updateTable();
         }
     }
 
