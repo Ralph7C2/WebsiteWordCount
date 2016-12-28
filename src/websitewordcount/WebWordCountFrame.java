@@ -7,6 +7,8 @@ package websitewordcount;
 
 import java.awt.Rectangle;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -322,8 +324,11 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     private void replaceListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replaceListButtonActionPerformed
         clearTable();
         parent.links.clear();
+        String url = HyperlinkList.getSelectedValue();
         clearLinkList();
-        parent.getWordCountFromUrl(HyperlinkList.getSelectedValue());
+//System.out.println((HyperlinkList.getSelectionModel().isSelectionEmpty()?"Empty select":"non-empty select"));
+        System.out.println("Replace list from: "+url);
+        parent.getWordCountFromUrl(url);
     }//GEN-LAST:event_replaceListButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
