@@ -11,19 +11,32 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author 110100100
+ * @author Ralph Landon
  */
 public class WebWordCountFrame extends javax.swing.JFrame {
+
+    boolean excludeCommonWords;
+    boolean useMin;
+    boolean useMax;
+    int minWordLength;
+    int maxWordLength;
 
     WebsiteWordCount parent;
 
     /**
      * Creates new form WebWordCountFrame
+     *
      * @param parent The main program
      */
     public WebWordCountFrame(WebsiteWordCount parent) {
         this.parent = parent;
         initComponents();
+
+        excludeCommonWords = false;
+        useMin = false;
+        useMax = false;
+        minWordLength = 0;
+        maxWordLength = 0;
     }
 
     protected void clearTable() {
@@ -39,7 +52,9 @@ public class WebWordCountFrame extends javax.swing.JFrame {
             if (words[i] == null) {
                 continue;
             }
-            tm.addRow(new Object[]{words[i], counts[i]});
+            if (!parent.commonWordList.contains(words[i])) {
+                tm.addRow(new Object[]{words[i], counts[i]});
+            }
         }
 
     }
@@ -176,6 +191,11 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.lightGray, null, null));
 
         replaceListButton.setText("Replace List");
+        replaceListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                replaceListButtonActionPerformed(evt);
+            }
+        });
 
         addToListButton.setText("Add to List");
 
@@ -258,19 +278,19 @@ public class WebWordCountFrame extends javax.swing.JFrame {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         String searchWord = JOptionPane.showInputDialog(this, "Enter word to search", "Search", JOptionPane.QUESTION_MESSAGE);
-        DefaultTableModel tm = (DefaultTableModel)wordCountTable.getModel();
+        DefaultTableModel tm = (DefaultTableModel) wordCountTable.getModel();
         boolean found = false;
-        for(int i = 0;i<tm.getRowCount();i++) {
-            if(searchWord.equalsIgnoreCase((String)tm.getValueAt(i,0))) {
-                wordCountTable.removeRowSelectionInterval(0, tm.getRowCount()-1);
+        for (int i = 0; i < tm.getRowCount(); i++) {
+            if (searchWord.equalsIgnoreCase((String) tm.getValueAt(i, 0))) {
+                wordCountTable.removeRowSelectionInterval(0, tm.getRowCount() - 1);
                 wordCountTable.addRowSelectionInterval(i, i);
                 wordCountTable.scrollRectToVisible(new Rectangle(wordCountTable.getCellRect(i, 0, true)));
                 found = true;
                 break;
             }
         }
-        if(!found) {
-            JOptionPane.showMessageDialog(this, "The word \""+searchWord + "\" was not found", "Word not found", JOptionPane.INFORMATION_MESSAGE);
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "The word \"" + searchWord + "\" was not found", "Word not found", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -282,6 +302,13 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         FilterDialog fd = new FilterDialog(this);
         fd.setVisible(true);
     }//GEN-LAST:event_filterButtonActionPerformed
+
+    private void replaceListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replaceListButtonActionPerformed
+        clearTable();
+        parent.links.clear();
+        clearLinkList();
+        parent.getWordCountFromUrl(HyperlinkList.getSelectedValue());
+    }//GEN-LAST:event_replaceListButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> HyperlinkList;
@@ -300,4 +327,54 @@ public class WebWordCountFrame extends javax.swing.JFrame {
     private javax.swing.JTextField urlTextField;
     private javax.swing.JTable wordCountTable;
     // End of variables declaration//GEN-END:variables
+
+    void setFilter(String filter, boolean bool, int num) {
+        switch (filter) {
+            case "excludeCommon":
+                excludeCommonWords = bool;
+                break;
+            case "useMin":
+                useMin = bool;
+                minWordLength = (num == -1 ? minWordLength : num);
+                break;
+            case "useMax":
+                useMax = bool;
+                maxWordLength = (num == -1 ? maxWordLength : num);
+                break;
+        }
+    }
+
+    boolean getFilter(String filter) {
+        switch (filter) {
+            case "excludeCommon":
+                return excludeCommonWords;
+            case "useMin":
+                return useMin;
+            case "useMax":
+                return useMax;
+            default:
+                return false;
+        }
+    }
+
+    String getFilterValue(String filter) {
+        switch (filter) {
+            case "min":
+                return "" + minWordLength;
+            case "max":
+                return "" + maxWordLength;
+            default:
+                return "";
+        }
+    }
+
+    void fillLinkList() {
+        String[] words = new String[parent.links.size()];
+        parent.links.toArray(words);
+        HyperlinkList.setListData(words);
+    }
+    
+    void clearLinkList() {
+        HyperlinkList.setListData(new String[] {});
+    }
 }
