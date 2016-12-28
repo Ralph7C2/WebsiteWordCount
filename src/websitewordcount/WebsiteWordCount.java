@@ -107,6 +107,7 @@ public class WebsiteWordCount {
      */
     public WebsiteWordCount() {
         commonWordList = new ArrayList<>();
+        links = new ArrayList<>();
         loadCommonWordList();
 
         //Initialize and show the frame
@@ -155,7 +156,10 @@ public class WebsiteWordCount {
         }
         Elements ahref = doc.getElementsByTag("a");
         for(Element e : ahref) {
-            links.add(e.attr("href"));
+            String s = e.attr("href");
+            if(s!=null) {
+                links.add(e.attr("href"));
+            }
         }
         frame.fillLinkList();
         

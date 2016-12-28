@@ -307,7 +307,7 @@ public class WebWordCountFrame extends javax.swing.JFrame {
         clearTable();
         parent.links.clear();
         clearLinkList();
-        parent.getWordCountFromUrl(HyperlinkList.get);
+        parent.getWordCountFromUrl(HyperlinkList.getSelectedValue());
     }//GEN-LAST:event_replaceListButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
